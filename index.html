@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyFit Admin - Sistema para Gimnasios | Gestión, Control de Socios y Más Alumnos</title>
+  <meta name="description" content="MyFit Admin ordena tu gimnasio y te trae clientes nuevos. Controlá pagos, gestioná alumnos, automatizá cobros y llenate de socios. Primer mes gratis, sin contrato.">
+  <meta property="og:title" content="MyFit Admin — Organizá tu gimnasio y llenalo de alumnos nuevos">
+  <meta property="og:description" content="El sistema que ordena tu gimnasio y te trae clientes nuevos. Control de pagos, alumnos, clases y automatizaciones. Primer mes gratis.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://via.placeholder.com/1200x630/0A0A0A/2668F8?text=MyFit+Admin">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { font-family: 'Outfit', sans-serif; }
+    .mono { font-family: 'Space Mono', monospace; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideRight {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(38,104,248,0.3); }
+      50% { box-shadow: 0 0 40px rgba(38,104,248,0.6); }
+    }
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes waPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(37,211,102,0); }
+    }
+    @keyframes urgencyBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .anim-fade-up { animation: fadeUp 0.7s ease both; }
+    .anim-scale-in { animation: scaleIn 0.6s ease both; }
+    .anim-slide-right { animation: slideRight 0.6s ease both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    .delay-6 { animation-delay: 0.6s; }
+    .delay-7 { animation-delay: 0.7s; }
+
+    .glow-btn { animation: pulse-glow 2.5s ease-in-out infinite; }
+    .wa-btn { animation: waPulse 2s ease-in-out infinite; }
+
+    .hero-grid {
+      background-image:
+        linear-gradient(rgba(38,104,248,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38,104,248,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .problem-item { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .problem-item:hover { transform: translateX(8px); }
+
+    .benefit-card { transition: transform 0.3s ease; }
+    .benefit-card:hover { transform: translateY(-6px); }
+
+    .feature-item { transition: all 0.3s ease; }
+    .feature-item:hover { transform: translateX(6px); }
+
+    .testimonial-card { transition: transform 0.3s ease; }
+    .testimonial-card:hover { transform: translateY(-4px); }
+
+    .why-card { transition: all 0.3s ease; }
+    .why-card:hover { transform: translateY(-4px); }
+
+    .pricing-card { transition: all 0.3s ease; }
+    .pricing-card:hover { transform: translateY(-6px); }
+
+    .stat-number {
+      background: linear-gradient(135deg, #2668F8, #1E4CB8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* FAQ accordion */
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+    .faq-answer.open { max-height: 200px; }
+    .faq-item { cursor: pointer; }
+    .faq-icon { transition: transform 0.3s ease; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    /* Urgency bar */
+    .urgency-dot { animation: urgencyBlink 1.5s ease-in-out infinite; }
+
+    /* WhatsApp float */
+    .wa-float {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+    .wa-float:hover { transform: scale(1.1); }
+
+    /* Before/after comparison */
+    .compare-col { transition: all 0.3s ease; }
+
+    /* Pricing popular badge */
+    .popular-badge {
+      background: linear-gradient(135deg, #2668F8, #1a4fd4);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Stats counter */
+    .stat-card { transition: transform 0.3s ease; }
+    .stat-card:hover { transform: translateY(-4px); }
+  </style>
+ </head>
+ <body class="h-full">
+
+  <!-- WHATSAPP FLOAT BUTTON -->
+  <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20probar%20MyFit%20Admin%20gratis" target="_blank" class="wa-float wa-btn" title="Escribinos por WhatsApp">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <div id="app-wrapper" class="w-full h-full overflow-auto" style="background-color: #0A0A0A; color: #FFFFFF;">
+
+    <!-- URGENCY TOP BAR -->
+    <div class="w-full py-2.5 px-4 text-center text-sm font-semibold flex items-center justify-center gap-2" style="background: rgba(38,104,248,0.15); border-bottom: 1px solid rgba(38,104,248,0.25);">
+      <span class="urgency-dot w-2 h-2 rounded-full inline-block" style="background:#2668F8;"></span>
+      <span style="color:#FFFFFF;">⚡ Solo quedan <strong style="color:#2668F8;">3 cupos</strong> para implementación personalizada este mes</span>
+      <a href="#contacto" class="hidden sm:inline-block ml-2 px-3 py-1 rounded-full text-xs font-bold" style="background:#2668F8; color:#FFFFFF;">Reservar lugar →</a>
+    </div>
+
+    <!-- NAV -->
+    <nav class="w-full fixed top-0 left-0 z-50" style="background: rgba(10,10,10,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(38,104,248,0.1); margin-top: 0;">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2 anim-slide-right">
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: #2668F8;">
+            <i data-lucide="dumbbell" style="width:20px;height:20px;color:#FFFFFF;"></i>
+          </div>
+          <span id="nav-logo" class="text-xl font-bold tracking-tight" style="color:#FFFFFF;">MyFit<span style="color:#2668F8;">Admin</span></span>
+        </div>
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium" style="color: #A0A0A0;">
+          <a href="#problemas" class="hover:text-white transition-colors">Problemas</a>
+          <a href="#beneficios" class="hover:text-white transition-colors">Beneficios</a>
+          <a href="#features" class="hover:text-white transition-colors">Features</a>
+          <a href="#precios" class="hover:text-white transition-colors">Precios</a>
+          <a href="#contacto" class="hover:text-white transition-colors">Contacto</a>
+        </div>
+        <a href="#contacto" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:scale-105" style="background:#2668F8; color:#FFFFFF;">
+          <span id="nav-cta">Probar gratis</span>
+          <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden" style="color:#FFFFFF;" aria-label="Abrir menú">
+          <i data-lucide="menu" style="width:24px;height:24px;"></i>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 flex flex-col gap-3 text-sm font-medium" style="color:#A0A0A0;">
+        <a href="#problemas" class="py-2 border-b" style="border-color:rgba(255,255,255,0.08);">Problemas</a>
+        <a href="#beneficios" class="py-2 border-b" style="border-color:rgba(255,255,255,0.08);">Beneficios</a>
+        <a href="#features" class="py-2 border-b" style="border-color:rgba(255,255,255,0.08);">Features</a>
+        <a href="#precios" class="py-2 border-b" style="border-color:rgba(255,255,255,0.08);">Precios</a>
+        <a href="#contacto" class="py-2" style="color:#2668F8; font-weight:700;">Contacto / Probar gratis</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero-grid relative w-full pt-40 pb-20 md:pt-52 md:pb-32 px-6" style="background: #0A0A0A;">
+      <div class="max-w-7xl mx-auto relative z-10">
+        <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 anim-fade-up mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+          🚀 Gestión de gimnasio simplificada
+        </div>
+        <h1 id="hero-title" class="text-4xl sm:text-5xl md:text-7xl font-black leading-[1.05] max-w-4xl mb-6 anim-fade-up delay-1" style="color:#FFFFFF;">
+          Organizá tu gimnasio<br><span style="color:#2668F8;">y llenalo de alumnos nuevos</span>
+        </h1>
+        <p id="hero-subtitle" class="text-lg md:text-xl max-w-2xl mb-10 anim-fade-up delay-2" style="color:#A0A0A0; line-height:1.7;">
+          Automatizá cobros, controlá alumnos, organizá clases y captá clientes nuevos con MyFit Admin: el sistema que ordena tu negocio <em>y</em> lo hace crecer.
+        </p>
+        <div class="flex flex-wrap gap-4 anim-fade-up delay-3">
+          <a href="#contacto" id="hero-cta-btn" class="glow-btn inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-bold transition-all hover:scale-105" style="background:#2668F8; color:#FFFFFF;">
+            <span id="hero-cta-text">Pedí tu mes gratis</span>
+            <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+          </a>
+          <a href="#beneficios" class="inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-medium border transition-all hover:bg-white hover:bg-opacity-5" style="border-color: rgba(255,255,255,0.2); color:#FFFFFF;">
+            Ver cómo funciona
+          </a>
+        </div>
+        <div class="flex flex-wrap gap-3 mt-6 anim-fade-up delay-4">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.18); color:#A0A0A0;"><i data-lucide="check-circle" style="width:13px;height:13px;color:#2668F8;"></i>Sin contrato</span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.18); color:#A0A0A0;"><i data-lucide="check-circle" style="width:13px;height:13px;color:#2668F8;"></i>Sin tarjeta de crédito</span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.18); color:#A0A0A0;"><i data-lucide="check-circle" style="width:13px;height:13px;color:#2668F8;"></i>Sin riesgo</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <section class="w-full px-6 py-14" style="background: #111111; border-top: 1px solid rgba(38,104,248,0.1); border-bottom: 1px solid rgba(38,104,248,0.1);">
+      <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="stat-card">
+          <div class="text-4xl font-black mb-1 stat-number" id="stat1">+50</div>
+          <div class="text-sm" style="color:#A0A0A0;">Gimnasios activos</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-4xl font-black mb-1 stat-number" id="stat2">8hs</div>
+          <div class="text-sm" style="color:#A0A0A0;">Ahorro semanal promedio</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-4xl font-black mb-1 stat-number" id="stat3">+30%</div>
+          <div class="text-sm" style="color:#A0A0A0;">Aumento de ingresos</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-4xl font-black mb-1 stat-number" id="stat4">0</div>
+          <div class="text-sm" style="color:#A0A0A0;">Pagos perdidos</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROBLEMAS -->
+    <section id="problemas" class="w-full px-6 py-20 md:py-28" style="background: #1A1A1A;">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4 mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+            El problema
+          </div>
+          <h2 id="problems-title" class="text-4xl md:text-5xl font-black leading-tight mb-6" style="color:#FFFFFF;">Si tenés un gimnasio, <span style="color:#2668F8;">seguro te pasa esto…</span></h2>
+          <p style="color:#A0A0A0; line-height:1.8; font-size:18px;">La mayoría de dueños de gimnasios pierden tiempo administrando y dinero por desorganización. No tiene que ser así.</p>
+        </div>
+        <div class="space-y-4">
+          <div class="problem-item rounded-xl p-6 flex gap-4" style="background: #111111; border: 1px solid rgba(38,104,248,0.1);">
+            <div style="background: rgba(255,59,48,0.2); border: 1px solid rgba(255,59,48,0.3);" class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="alert-circle" style="width:24px;height:24px;color:#FF3B30;"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-1" style="color:#FFFFFF;">Se te pasan pagos y perdés plata todos los meses</h3>
+              <p style="color:#A0A0A0;">Sin un sistema, es imposible controlar quién pagó, quién debe y cuándo vence cada cuota.</p>
+            </div>
+          </div>
+          <div class="problem-item rounded-xl p-6 flex gap-4" style="background: #111111; border: 1px solid rgba(38,104,248,0.1);">
+            <div style="background: rgba(255,59,48,0.2); border: 1px solid rgba(255,59,48,0.3);" class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="files" style="width:24px;height:24px;color:#FF3B30;"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-1" style="color:#FFFFFF;">Tenés todo en cuadernos, Excel o WhatsApp desordenado</h3>
+              <p style="color:#A0A0A0;">La información está dispersa, nadie sabe dónde buscar y todo toma el doble de tiempo.</p>
+            </div>
+          </div>
+          <div class="problem-item rounded-xl p-6 flex gap-4" style="background: #111111; border: 1px solid rgba(38,104,248,0.1);">
+            <div style="background: rgba(255,59,48,0.2); border: 1px solid rgba(255,59,48,0.3);" class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="help-circle" style="width:24px;height:24px;color:#FF3B30;"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-1" style="color:#FFFFFF;">Entran personas sin pagar y no te enterás</h3>
+              <p style="color:#A0A0A0;">Sin control de acceso claro, hay gente que entrena gratis mientras vos perdés dinero real.</p>
+            </div>
+          </div>
+          <div class="problem-item rounded-xl p-6 flex gap-4" style="background: #111111; border: 1px solid rgba(38,104,248,0.1);">
+            <div style="background: rgba(255,59,48,0.2); border: 1px solid rgba(255,59,48,0.3);" class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="clock" style="width:24px;height:24px;color:#FF3B30;"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-1" style="color:#FFFFFF;">Perdés tiempo respondiendo siempre lo mismo</h3>
+              <p style="color:#A0A0A0;">Cada alumno pregunta por su saldo, cuándo vence, si su clase está anotada. Todo manual, todo el tiempo.</p>
+            </div>
+          </div>
+          <div class="problem-item rounded-xl p-6 flex gap-4" style="background: #111111; border: 1px solid rgba(38,104,248,0.1);">
+            <div style="background: rgba(255,59,48,0.2); border: 1px solid rgba(255,59,48,0.3);" class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="trending-down" style="width:24px;height:24px;color:#FF3B30;"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-1" style="color:#FFFFFF;">No aparecés en Google y la competencia te gana visibilidad</h3>
+              <p style="color:#A0A0A0;">Cuando buscan un gimnasio en tu barrio, aparece el de enfrente. No porque sea mejor — porque está mejor posicionado.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-12 p-8 rounded-xl border-l-4" style="background: rgba(38,104,248,0.08); border-color: #2668F8;">
+          <p class="text-lg font-bold" style="color:#FFFFFF;">Y lo peor… <span style="color:#FF3B30;">estás más ocupado administrando que haciendo crecer tu negocio.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOLUCIÓN — ANTES/DESPUÉS -->
+    <section class="w-full px-6 py-20 md:py-28" style="background: #0F0F0F;">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4 mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+            La solución
+          </div>
+          <h2 class="text-4xl md:text-5xl font-black leading-tight mb-6" style="color:#FFFFFF;">MyFit Admin: <span style="color:#2668F8;">te ordena el gimnasio<br>y te trae clientes nuevos</span></h2>
+          <p style="color:#A0A0A0; line-height:1.8; font-size:18px;">No es solo un sistema de gestión. Es la herramienta que organiza todo tu negocio <em>y</em> lo hace crecer con automatizaciones y visibilidad en Google.</p>
+        </div>
+
+        <!-- Antes / Después comparison -->
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <!-- Antes -->
+          <div class="compare-col rounded-2xl p-8" style="background: rgba(255,59,48,0.05); border: 1px solid rgba(255,59,48,0.2);">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background: rgba(255,59,48,0.2);">
+                <i data-lucide="x" style="width:16px;height:16px;color:#FF3B30;"></i>
+              </div>
+              <span class="font-bold text-lg" style="color:#FF3B30;">Sin MyFit Admin</span>
+            </div>
+            <ul class="space-y-3 text-sm" style="color:#A0A0A0;">
+              <li class="flex items-start gap-2"><i data-lucide="x-circle" style="width:16px;height:16px;color:#FF3B30;flex-shrink:0;margin-top:2px;"></i>Cuadernos, Excel y WhatsApp mezclados</li>
+              <li class="flex items-start gap-2"><i data-lucide="x-circle" style="width:16px;height:16px;color:#FF3B30;flex-shrink:0;margin-top:2px;"></i>No sabés quién pagó ni cuánto ganaste</li>
+              <li class="flex items-start gap-2"><i data-lucide="x-circle" style="width:16px;height:16px;color:#FF3B30;flex-shrink:0;margin-top:2px;"></i>Personas que entran sin pagar</li>
+              <li class="flex items-start gap-2"><i data-lucide="x-circle" style="width:16px;height:16px;color:#FF3B30;flex-shrink:0;margin-top:2px;"></i>Socios que se van sin avisar</li>
+              <li class="flex items-start gap-2"><i data-lucide="x-circle" style="width:16px;height:16px;color:#FF3B30;flex-shrink:0;margin-top:2px;"></i>No aparecés en Google Maps</li>
+              <li class="flex items-start gap-2"><i data-lucide="x-circle" style="width:16px;height:16px;color:#FF3B30;flex-shrink:0;margin-top:2px;"></i>Horas perdidas en tareas repetitivas</li>
+            </ul>
+          </div>
+          <!-- Después -->
+          <div class="compare-col rounded-2xl p-8" style="background: rgba(38,104,248,0.07); border: 1px solid rgba(38,104,248,0.25);">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background: rgba(38,104,248,0.2);">
+                <i data-lucide="check" style="width:16px;height:16px;color:#2668F8;"></i>
+              </div>
+              <span class="font-bold text-lg" style="color:#2668F8;">Con MyFit Admin</span>
+            </div>
+            <ul class="space-y-3 text-sm" style="color:#FFFFFF;">
+              <li class="flex items-start gap-2"><i data-lucide="check-circle" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;margin-top:2px;"></i>Todo centralizado en un solo sistema</li>
+              <li class="flex items-start gap-2"><i data-lucide="check-circle" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;margin-top:2px;"></i>Sabés en 2 segundos quién debe y cuánto ganás</li>
+              <li class="flex items-start gap-2"><i data-lucide="check-circle" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;margin-top:2px;"></i>Control de acceso y deudas en tiempo real</li>
+              <li class="flex items-start gap-2"><i data-lucide="check-circle" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;margin-top:2px;"></i>Mensajes automáticos que recuperan socios</li>
+              <li class="flex items-start gap-2"><i data-lucide="check-circle" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;margin-top:2px;"></i>Aparecés primero en Google Maps de tu zona</li>
+              <li class="flex items-start gap-2"><i data-lucide="check-circle" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;margin-top:2px;"></i>El sistema trabaja solo, vos enfocate en crecer</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFICIOS -->
+    <section id="beneficios" class="w-full px-6 py-20 md:py-28" style="background: #1A1A1A;">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4 mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+            Resultados reales
+          </div>
+          <h2 id="benefits-title" class="text-4xl md:text-5xl font-black leading-tight mb-4" style="color:#FFFFFF;">Lo que vas a lograr <span style="color:#2668F8;">usando MyFit Admin</span></h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="benefit-card rounded-2xl p-8" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="credit-card" style="width:28px;height:28px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Control total de pagos</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">Sabé quién pagó, quién debe y automatizá recordatorios. Cero pagos perdidos, cero deudas olvidadas.</p>
+          </div>
+          <div class="benefit-card rounded-2xl p-8" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="users" style="width:28px;height:28px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Más alumnos nuevos</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">Te posicionamos en Google Maps y automatizamos el seguimiento de interesados para que entren más socios cada mes.</p>
+          </div>
+          <div class="benefit-card rounded-2xl p-8" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="clock" style="width:28px;height:28px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Más tiempo libre</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">Dejá de hacer tareas repetitivas y enfocate en crecer. Recuperá horas cada semana con automatizaciones.</p>
+          </div>
+          <div class="benefit-card rounded-2xl p-8" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="layout-dashboard" style="width:28px;height:28px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Organización profesional</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">Todo tu gimnasio ordenado en un solo sistema. Sin papeles, sin Excel, sin caos.</p>
+          </div>
+          <div class="benefit-card rounded-2xl p-8" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="trending-up" style="width:28px;height:28px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Más ingresos</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">Menos olvidos de pagos + más alumnos captados = más plata entrando. Clientes nuestros aumentaron ingresos un 30%.</p>
+          </div>
+          <div class="benefit-card rounded-2xl p-8" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="brain" style="width:28px;height:28px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Decisiones basadas en datos</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">Paneles intuitivos que te muestran qué está funcionando y qué no. Crecé con inteligencia.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="w-full px-6 py-20 md:py-28" style="background: #0F0F0F;">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4 mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+            Herramientas poderosas
+          </div>
+          <h2 id="features-title" class="text-4xl md:text-5xl font-black leading-tight mb-4" style="color:#FFFFFF;">Todo lo que <span style="color:#2668F8;">incluye</span></h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+          <div>
+            <!-- STARRED feature -->
+            <div class="feature-item rounded-xl p-6 mb-4 flex gap-4 cursor-pointer relative" style="background: rgba(38,104,248,0.12); border: 1px solid rgba(38,104,248,0.3);">
+              <span class="absolute top-3 right-3 text-xs font-bold px-2 py-0.5 rounded-full" style="background:#2668F8; color:#FFFFFF;">⭐ Más usado</span>
+              <i data-lucide="credit-card" style="width:28px;height:28px;color:#2668F8;flex-shrink:0;"></i>
+              <div>
+                <h4 class="font-bold" style="color:#FFFFFF;">Control de pagos y vencimientos</h4>
+                <p class="text-sm mt-1" style="color:#A0A0A0;">Automatización de cobros y control de deudas en tiempo real. Nunca más un peso perdido.</p>
+              </div>
+            </div>
+            <div class="feature-item rounded-xl p-6 mb-4 flex gap-4 cursor-pointer" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.15);">
+              <i data-lucide="users-cog" style="width:28px;height:28px;color:#2668F8;flex-shrink:0;"></i>
+              <div>
+                <h4 class="font-bold" style="color:#FFFFFF;">Gestión de alumnos</h4>
+                <p class="text-sm mt-1" style="color:#A0A0A0;">Base de datos completa y actualizada de todos tus socios.</p>
+              </div>
+            </div>
+            <div class="feature-item rounded-xl p-6 mb-4 flex gap-4 cursor-pointer" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.15);">
+              <i data-lucide="clipboard-check" style="width:28px;height:28px;color:#2668F8;flex-shrink:0;"></i>
+              <div>
+                <h4 class="font-bold" style="color:#FFFFFF;">Registro de asistencia</h4>
+                <p class="text-sm mt-1" style="color:#A0A0A0;">Controlá quién asiste a cada clase de forma simple e intuitiva.</p>
+              </div>
+            </div>
+            <div class="feature-item rounded-xl p-6 mb-4 flex gap-4 cursor-pointer" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.15);">
+              <i data-lucide="calendar" style="width:28px;height:28px;color:#2668F8;flex-shrink:0;"></i>
+              <div>
+                <h4 class="font-bold" style="color:#FFFFFF;">Administración de clases</h4>
+                <p class="text-sm mt-1" style="color:#A0A0A0;">Organizá horarios, instructores y capacidad sin errores.</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="feature-item rounded-xl p-6 mb-4 flex gap-4 cursor-pointer" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.15);">
+              <i data-lucide="bell" style="width:28px;height:28px;color:#2668F8;flex-shrink:0;"></i>
+              <div>
+                <h4 class="font-bold" style="color:#FFFFFF;">Recordatorios automáticos por WhatsApp</h4>
+                <p class="text-sm mt-1" style="color:#A0A0A0;">El sistema escribe solo a tus socios cuando vence la cuota. Sin que hagas nada.</p>
+              </div>
+            </div>
+            <div class="feature-item rounded-xl p-6 mb-4 flex gap-4 cursor-pointer" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.15);">
+              <i data-lucide="map-pin" style="width:28px;height:28px;color:#2668F8;flex-shrink:0;"></i>
+              <div>
+                <h4 class="font-bold" style="color:#FFFFFF;">Posicionamiento en Google Maps</h4>
+                <p class="text-sm mt-1" style="color:#A0A0A0;">Cuando busquen gym en tu barrio, aparecés vos primero.</p>
+              </div>
+            </div>
+            <div class="feature-item rounded-xl p-6 mb-4 flex gap-4 cursor-pointer" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.15);">
+              <i data-lucide="bar-chart-2" style="width:28px;height:28px;color:#2668F8;flex-shrink:0;"></i>
+              <div>
+                <h4 class="font-bold" style="color:#FFFFFF;">Panel de control simple e intuitivo</h4>
+                <p class="text-sm mt-1" style="color:#A0A0A0;">Visualizá toda la información importante de un vistazo.</p>
+              </div>
+            </div>
+            <div class="feature-item rounded-xl p-6 flex gap-4 cursor-pointer" style="background: rgba(38,104,248,0.08); border: 1px solid rgba(38,104,248,0.15);">
+              <i data-lucide="smartphone" style="width:28px;height:28px;color:#2668F8;flex-shrink:0;"></i>
+              <div>
+                <h4 class="font-bold" style="color:#FFFFFF;">Acceso desde celular o PC</h4>
+                <p class="text-sm mt-1" style="color:#A0A0A0;">Gestioná tu gimnasio desde donde estés, cuando quieras.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIOS -->
+    <section class="w-full px-6 py-20 md:py-28" style="background: #1A1A1A;">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4 mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+            Lo dicen nuestros clientes
+          </div>
+          <h2 id="testimonials-title" class="text-4xl md:text-5xl font-black leading-tight mb-4" style="color:#FFFFFF;">Gimnasios que ya están <span style="color:#2668F8;">creciendo con MyFit Admin</span></h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="testimonial-card rounded-2xl p-8" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="flex gap-1 mb-4">
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+            </div>
+            <p style="color:#FFFFFF; line-height:1.8; font-size:16px; margin-bottom:16px;">"Antes tenía todo en Excel y era un caos total. Ahora controlo todo en minutos. Mis alumnos están más contentos y yo tengo más tiempo libre."</p>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top:16px;" class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background: rgba(38,104,248,0.2); color:#2668F8;">CM</div>
+              <div>
+                <p class="font-bold" style="color:#2668F8;">Carlos Mendez</p>
+                <p class="text-sm" style="color:#A0A0A0;">Dueño · FitZone Gym</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card rounded-2xl p-8" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="flex gap-1 mb-4">
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+            </div>
+            <p style="color:#FFFFFF; line-height:1.8; font-size:16px; margin-bottom:16px;">"Empecé a recuperar pagos que antes perdía todos los meses. Desde que uso MyFit, mis ingresos crecieron un 30% sin agregar más alumnos."</p>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top:16px;" class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background: rgba(38,104,248,0.2); color:#2668F8;">ML</div>
+              <div>
+                <p class="font-bold" style="color:#2668F8;">Marina Lopez</p>
+                <p class="text-sm" style="color:#A0A0A0;">Entrenadora Personal · ML Fitness</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card rounded-2xl p-8" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="flex gap-1 mb-4">
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+              <i data-lucide="star" style="width:20px;height:20px;color:#FFB800;fill:#FFB800;"></i>
+            </div>
+            <p style="color:#FFFFFF; line-height:1.8; font-size:16px; margin-bottom:16px;">"Lo mejor es que mis empleados también pueden acceder. Todo el equipo ve lo mismo y no hay errores. Es un alivio total."</p>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top:16px;" class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background: rgba(38,104,248,0.2); color:#2668F8;">JR</div>
+              <div>
+                <p class="font-bold" style="color:#2668F8;">Juan Rodriguez</p>
+                <p class="text-sm" style="color:#A0A0A0;">Manager · Strong Fit</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- POR QUÉ ELEGIR -->
+    <section class="w-full px-6 py-20 md:py-28" style="background: #0F0F0F;">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4 mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+            Por qué nosotros
+          </div>
+          <h2 id="why-title" class="text-4xl md:text-5xl font-black leading-tight mb-4" style="color:#FFFFFF;">¿Por qué elegir <span style="color:#2668F8;">MyFit Admin?</span></h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div class="why-card rounded-2xl p-8" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="target" style="width:24px;height:24px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Diseñado para gimnasios</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">No es una herramienta genérica. Está creada pensando en los problemas reales de los dueños de gimnasios.</p>
+          </div>
+          <div class="why-card rounded-2xl p-8" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="mouse" style="width:24px;height:24px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Fácil de usar</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">No necesitás ser técnico. La interfaz es intuitiva y cualquiera puede aprender en minutos.</p>
+          </div>
+          <div class="why-card rounded-2xl p-8" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="trending-up" style="width:24px;height:24px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Pensado para aumentar ingresos</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">No es solo para organizar. Cada feature está diseñada para ayudarte a ganar más dinero.</p>
+          </div>
+          <div class="why-card rounded-2xl p-8" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="headphones" style="width:24px;height:24px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Soporte cercano en español</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">Tenés un equipo listo para ayudarte. Somos latinoamericanos y entendemos tu contexto.</p>
+          </div>
+          <div class="why-card rounded-2xl p-8" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="zap" style="width:24px;height:24px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Evoluciona constantemente</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">Escuchamos a nuestros clientes y agregamos features nuevas según lo que necesitan.</p>
+          </div>
+          <div class="why-card rounded-2xl p-8" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-6" style="background: rgba(38,104,248,0.1);">
+              <i data-lucide="package" style="width:24px;height:24px;color:#2668F8;"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3" style="color:#FFFFFF;">Implementación rápida</h3>
+            <p style="color:#A0A0A0; line-height:1.7;">Empezás a usar MyFit en días, no en meses. Lo instalamos y configuramos nosotros.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="precios" class="w-full px-6 py-20 md:py-28" style="background: #1A1A1A;">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4 mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+            Planes y precios
+          </div>
+          <h2 class="text-4xl md:text-5xl font-black leading-tight mb-4" style="color:#FFFFFF;">Elegí el plan <span style="color:#2668F8;">que mejor se ajusta</span></h2>
+          <p style="color:#A0A0A0; font-size:18px;">Todos los planes incluyen el primer mes gratis. Sin contrato, podés salir cuando quieras.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+
+          <!-- Plan 0 — Solo sistema -->
+          <div class="pricing-card rounded-2xl p-7 flex flex-col" style="background: #111111; border: 1px solid rgba(255,255,255,0.08);">
+            <div class="mb-6">
+              <h3 class="text-lg font-black mb-1" style="color:#FFFFFF;">Solo el Sistema</h3>
+              <p class="text-sm mb-6" style="color:#A0A0A0;">Para empezar a ordenarte sin más vueltas.</p>
+              <div class="flex items-end gap-1 mb-1">
+                <span class="text-4xl font-black" style="color:#FFFFFF;">USD 20</span>
+                <span class="text-sm mb-1.5" style="color:#A0A0A0;">/mes</span>
+              </div>
+              <p class="text-xs font-semibold" style="color:#2668F8;">✅ Primer mes gratis</p>
+            </div>
+            <ul class="space-y-3 text-sm flex-1 mb-8" style="color:#A0A0A0;">
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Sistema de gestión completo</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Control de socios y pagos</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Registro de asistencia</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Panel de control</li>
+              <li class="flex items-center gap-2"><i data-lucide="x" style="width:16px;height:16px;color:#555;flex-shrink:0;"></i><span style="color:#555;">Web ni Google Maps</span></li>
+              <li class="flex items-center gap-2"><i data-lucide="x" style="width:16px;height:16px;color:#555;flex-shrink:0;"></i><span style="color:#555;">Automatizaciones</span></li>
+            </ul>
+            <a href="#contacto" class="w-full py-3 rounded-full text-sm font-bold text-center border transition-all hover:bg-white hover:bg-opacity-5" style="border-color:rgba(255,255,255,0.15); color:#A0A0A0;">
+              Empezar gratis
+            </a>
+          </div>
+
+          <!-- Plan 1 -->
+          <div class="pricing-card rounded-2xl p-8 flex flex-col" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="mb-6">
+              <h3 class="text-xl font-black mb-1" style="color:#FFFFFF;">Más Alumnos</h3>
+              <p class="text-sm mb-6" style="color:#A0A0A0;">Para gimnasios que quieren ordenarse y empezar a crecer.</p>
+              <div class="flex items-end gap-1 mb-1">
+                <span class="text-4xl font-black" style="color:#FFFFFF;">USD 50</span>
+                <span class="text-sm mb-1.5" style="color:#A0A0A0;">/mes</span>
+              </div>
+              <p class="text-xs font-semibold" style="color:#2668F8;">✅ Primer mes gratis</p>
+            </div>
+            <ul class="space-y-3 text-sm flex-1 mb-8" style="color:#A0A0A0;">
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Sistema de gestión completo</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Control de pagos y socios</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Web profesional</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Google Maps básico</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Soporte por WhatsApp</li>
+            </ul>
+            <a href="#contacto" class="w-full py-3 rounded-full text-sm font-bold text-center border transition-all hover:bg-white hover:bg-opacity-5" style="border-color:rgba(38,104,248,0.4); color:#2668F8;">
+              Empezar gratis
+            </a>
+          </div>
+
+          <!-- Plan 2 — POPULAR -->
+          <div class="pricing-card rounded-2xl p-8 flex flex-col relative" style="background: linear-gradient(160deg, rgba(38,104,248,0.12) 0%, rgba(38,104,248,0.04) 100%); border: 2px solid #2668F8;">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+              <span class="popular-badge">⭐ Más elegido</span>
+            </div>
+            <div class="mb-6">
+              <h3 class="text-xl font-black mb-1" style="color:#FFFFFF;">Lleno el Gym</h3>
+              <p class="text-sm mb-6" style="color:#A0A0A0;">El plan completo para crecer en serio.</p>
+              <div class="flex items-end gap-1 mb-1">
+                <span class="text-4xl font-black" style="color:#FFFFFF;">USD 110</span>
+                <span class="text-sm mb-1.5" style="color:#A0A0A0;">/mes</span>
+              </div>
+              <p class="text-xs font-semibold" style="color:#2668F8;">✅ Primer mes gratis</p>
+            </div>
+            <ul class="space-y-3 text-sm flex-1 mb-8" style="color:#A0A0A0;">
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Todo lo del plan anterior</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Google Maps PRO (top 3)</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Recordatorios automáticos WhatsApp</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Recuperación de ex-socios</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Soporte prioritario</li>
+            </ul>
+            <a href="#contacto" class="glow-btn w-full py-3 rounded-full text-sm font-bold text-center transition-all hover:scale-105" style="background:#2668F8; color:#FFFFFF;">
+              Empezar gratis
+            </a>
+          </div>
+
+          <!-- Plan 3 -->
+          <div class="pricing-card rounded-2xl p-8 flex flex-col" style="background: #111111; border: 1px solid rgba(38,104,248,0.15);">
+            <div class="mb-6">
+              <h3 class="text-xl font-black mb-1" style="color:#FFFFFF;">Monstruo del Barrio 🦍</h3>
+              <p class="text-sm mb-6" style="color:#A0A0A0;">Para el gym que quiere dominar su zona.</p>
+              <div class="flex items-end gap-1 mb-1">
+                <span class="text-4xl font-black" style="color:#FFFFFF;">USD 160</span>
+                <span class="text-sm mb-1.5" style="color:#A0A0A0;">/mes</span>
+              </div>
+              <p class="text-xs font-semibold" style="color:#2668F8;">✅ Primer mes gratis</p>
+            </div>
+            <ul class="space-y-3 text-sm flex-1 mb-8" style="color:#A0A0A0;">
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Todo lo anterior incluido</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Campañas Meta/Google Ads</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Automatizaciones premium (n8n)</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Embudo automático de captación</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" style="width:16px;height:16px;color:#2668F8;flex-shrink:0;"></i>Reportes y métricas avanzadas</li>
+            </ul>
+            <a href="#contacto" class="w-full py-3 rounded-full text-sm font-bold text-center border transition-all hover:bg-white hover:bg-opacity-5" style="border-color:rgba(38,104,248,0.4); color:#2668F8;">
+              Empezar gratis
+            </a>
+          </div>
+
+        </div>
+        <p class="text-center mt-8 text-sm" style="color:#A0A0A0;">¿No sabés cuál elegir? <a href="#contacto" style="color:#2668F8; text-decoration:underline;">Contáctanos y te asesoramos sin compromiso.</a></p>
+      </div>
+    </section>
+
+    <!-- CTA MEDIO -->
+    <section class="w-full px-6 py-20 md:py-28" style="background: #0F0F0F;">
+      <div class="max-w-4xl mx-auto">
+        <div class="rounded-3xl p-8 md:p-16 text-center" style="background: linear-gradient(135deg, rgba(38,104,248,0.15) 0%, rgba(38,104,248,0.05) 100%); border: 1px solid rgba(38,104,248,0.2);">
+          <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+            Transformá tu gimnasio
+          </div>
+          <h2 id="final-cta-title" class="text-3xl md:text-5xl font-black leading-tight mb-6" style="color:#FFFFFF;">Pedí tu mes gratis hoy y <span style="color:#2668F8;">empezá a ver resultados</span></h2>
+          <p class="text-lg mb-10" style="color:#A0A0A0; line-height:1.8;">Sin contrato. Sin riesgo. Pagás solo cuando ves el sistema funcionando y estás conforme.</p>
+          <div class="flex flex-wrap gap-4 justify-center">
+            <a href="#contacto" class="glow-btn inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-bold transition-all hover:scale-105" style="background:#2668F8; color:#FFFFFF;">
+              <span>Empezar ahora — es gratis</span>
+              <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+            </a>
+            <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20una%20demo%20de%20MyFit%20Admin" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-bold border transition-all hover:bg-white hover:bg-opacity-5" style="border-color: rgba(37,211,102,0.4); color:#25D366;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Hablar por WhatsApp
+            </a>
+          </div>
+          <div style="margin-top:32px; padding-top:32px; border-top: 1px solid rgba(38,104,248,0.2);">
+            <p class="text-sm mb-2" style="color:#A0A0A0;">⚡ Solo quedan <strong style="color:#FF3B30;">3 cupos</strong> para implementación personalizada este mes</p>
+            <p class="font-bold" style="color:#2668F8;">Primer mes completamente gratis — sin tarjeta, sin contrato</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ — ACORDEÓN -->
+    <section class="w-full px-6 py-20 md:py-28" style="background: #0A0A0A;">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-black leading-tight mb-4" style="color:#FFFFFF;">Preguntas <span style="color:#2668F8;">frecuentes</span></h2>
+        </div>
+        <div class="space-y-3" id="faq-container">
+
+          <div class="faq-item rounded-xl overflow-hidden" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.1);">
+            <div class="faq-trigger flex items-center justify-between px-6 py-5">
+              <h3 class="font-bold text-base" style="color:#FFFFFF;">¿Es difícil de usar?</h3>
+              <i data-lucide="plus" class="faq-icon flex-shrink-0" style="width:20px;height:20px;color:#2668F8;"></i>
+            </div>
+            <div class="faq-answer px-6" style="color:#A0A0A0;">
+              <p class="pb-5">No, está pensado para que cualquier dueño de gimnasio pueda usarlo sin experiencia técnica. La interfaz es intuitiva y tenemos tutoriales para cada función. Lo instalamos y configuramos nosotros — vos solo aprendés a usar lo que ya está listo.</p>
+            </div>
+          </div>
+
+          <div class="faq-item rounded-xl overflow-hidden" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.1);">
+            <div class="faq-trigger flex items-center justify-between px-6 py-5">
+              <h3 class="font-bold text-base" style="color:#FFFFFF;">¿Funciona desde el celular?</h3>
+              <i data-lucide="plus" class="faq-icon flex-shrink-0" style="width:20px;height:20px;color:#2668F8;"></i>
+            </div>
+            <div class="faq-answer px-6" style="color:#A0A0A0;">
+              <p class="pb-5">Sí, podés gestionar todo desde cualquier dispositivo. Tiene versión web completa optimizada para celular y PC. Sin instalaciones, desde el navegador.</p>
+            </div>
+          </div>
+
+          <div class="faq-item rounded-xl overflow-hidden" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.1);">
+            <div class="faq-trigger flex items-center justify-between px-6 py-5">
+              <h3 class="font-bold text-base" style="color:#FFFFFF;">¿Puedo probarlo antes de pagar?</h3>
+              <i data-lucide="plus" class="faq-icon flex-shrink-0" style="width:20px;height:20px;color:#2668F8;"></i>
+            </div>
+            <div class="faq-answer px-6" style="color:#A0A0A0;">
+              <p class="pb-5">Sí, el primer mes es completamente gratis. Lo instalamos en tu gimnasio, lo usás un mes real, y solo empezás a pagar cuando estás conforme con los resultados. Sin tarjeta de crédito requerida.</p>
+            </div>
+          </div>
+
+          <div class="faq-item rounded-xl overflow-hidden" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.1);">
+            <div class="faq-trigger flex items-center justify-between px-6 py-5">
+              <h3 class="font-bold text-base" style="color:#FFFFFF;">¿Qué pasa con mis datos?</h3>
+              <i data-lucide="plus" class="faq-icon flex-shrink-0" style="width:20px;height:20px;color:#2668F8;"></i>
+            </div>
+            <div class="faq-answer px-6" style="color:#A0A0A0;">
+              <p class="pb-5">Tus datos están 100% protegidos. Usamos encriptación de nivel empresarial y realizamos respaldos automáticos cada día. Tus alumnos y su información son tuya — siempre.</p>
+            </div>
+          </div>
+
+          <div class="faq-item rounded-xl overflow-hidden" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.1);">
+            <div class="faq-trigger flex items-center justify-between px-6 py-5">
+              <h3 class="font-bold text-base" style="color:#FFFFFF;">¿Cuál es el costo real?</h3>
+              <i data-lucide="plus" class="faq-icon flex-shrink-0" style="width:20px;height:20px;color:#2668F8;"></i>
+            </div>
+            <div class="faq-answer px-6" style="color:#A0A0A0;">
+              <p class="pb-5">Los planes arrancan desde USD 50/mes. Primer mes gratis, sin contrato. Si con que no se te escape un solo socio al mes ya se paga solo — y generalmente la recuperación de pagos perdidos cubre el costo en la primera semana.</p>
+            </div>
+          </div>
+
+          <div class="faq-item rounded-xl overflow-hidden" style="background: #1A1A1A; border: 1px solid rgba(38,104,248,0.1);">
+            <div class="faq-trigger flex items-center justify-between px-6 py-5">
+              <h3 class="font-bold text-base" style="color:#FFFFFF;">¿Ya tengo un sistema, por qué cambiar?</h3>
+              <i data-lucide="plus" class="faq-icon flex-shrink-0" style="width:20px;height:20px;color:#2668F8;"></i>
+            </div>
+            <div class="faq-answer px-6" style="color:#A0A0A0;">
+              <p class="pb-5">¿Qué tan seguido lo usás? Muchos tienen un sistema que terminaron abandonando porque era complicado o no se adaptaba al gimnasio real. MyFit Admin es diferente: te lo instalamos, configuramos y acompañamos hasta que lo uses con comodidad.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT / CTA FINAL -->
+    <section id="contacto" class="w-full px-6 py-20 md:py-28" style="background: #1A1A1A;">
+      <div class="max-w-3xl mx-auto">
+        <div class="rounded-3xl p-8 md:p-12" style="background:#111111; border:1px solid rgba(38,104,248,0.15);">
+          <div class="text-center mb-10">
+            <h2 class="text-3xl md:text-4xl font-black mb-4" style="color:#FFFFFF;">¿Listo para crecer?</h2>
+            <p style="color:#A0A0A0; line-height:1.8;">Completá el formulario y te contactamos en menos de 24 horas.<br>Sin compromiso — primer mes completamente gratis.</p>
+          </div>
+          <form id="contact-form" class="flex flex-col gap-4">
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label for="cf-name" class="block text-sm font-medium mb-1.5" style="color:#FFFFFF;">Tu nombre</label>
+                <input id="cf-name" type="text" placeholder="Ej: Juan López" required class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all" style="background:#1A1A1A; color:#FFFFFF; border:1px solid rgba(255,255,255,0.1);" onfocus="this.style.borderColor='#2668F8'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+              </div>
+              <div>
+                <label for="cf-gym" class="block text-sm font-medium mb-1.5" style="color:#FFFFFF;">Nombre del gimnasio</label>
+                <input id="cf-gym" type="text" placeholder="Ej: Strong Fit" required class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all" style="background:#1A1A1A; color:#FFFFFF; border:1px solid rgba(255,255,255,0.1);" onfocus="this.style.borderColor='#2668F8'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+              </div>
+            </div>
+            <div>
+              <label for="cf-email" class="block text-sm font-medium mb-1.5" style="color:#FFFFFF;">Email</label>
+              <input id="cf-email" type="email" placeholder="tu@email.com" required class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all" style="background:#1A1A1A; color:#FFFFFF; border:1px solid rgba(255,255,255,0.1);" onfocus="this.style.borderColor='#2668F8'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+            </div>
+            <div>
+              <label for="cf-phone" class="block text-sm font-medium mb-1.5" style="color:#FFFFFF;">WhatsApp <span style="color:#A0A0A0;">(recomendado)</span></label>
+              <input id="cf-phone" type="tel" placeholder="+54 9 11 0000-0000" class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all" style="background:#1A1A1A; color:#FFFFFF; border:1px solid rgba(255,255,255,0.1);" onfocus="this.style.borderColor='#2668F8'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+            </div>
+            <button type="submit" id="contact-submit" class="mt-2 w-full py-4 rounded-full font-bold text-base transition-all hover:scale-[1.02] flex items-center justify-center gap-2" style="background:#2668F8; color:#FFFFFF;">
+              <span>Pedir mi mes gratis</span>
+              <i data-lucide="send" style="width:18px;height:18px;"></i>
+            </button>
+            <div id="form-success" class="hidden text-center py-4 rounded-xl text-sm font-medium" style="background:rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+              ✅ ¡Mensaje recibido! Te contactamos en menos de 24hs por WhatsApp o email.
+            </div>
+          </form>
+          <div class="mt-6 pt-6 text-center" style="border-top:1px solid rgba(255,255,255,0.06);">
+            <p class="text-sm" style="color:#A0A0A0;">¿Preferís hablar directo?</p>
+            <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20probar%20MyFit%20Admin%20gratis" target="_blank" class="inline-flex items-center gap-2 mt-2 text-sm font-bold" style="color:#25D366;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Escribinos por WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="w-full px-6 py-12" style="border-top:1px solid rgba(38,104,248,0.1); background: #0A0A0A;">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background:#2668F8;">
+              <i data-lucide="dumbbell" style="width:14px;height:14px;color:#FFFFFF;"></i>
+            </div>
+            <span id="footer-logo" class="font-bold text-lg" style="color:#FFFFFF;">MyFit<span style="color:#2668F8;">Admin</span></span>
+          </div>
+          <div class="flex items-center gap-6 text-sm" style="color:#A0A0A0;">
+            <a href="#problemas" class="hover:text-white transition-colors">Problemas</a>
+            <a href="#beneficios" class="hover:text-white transition-colors">Beneficios</a>
+            <a href="#precios" class="hover:text-white transition-colors">Precios</a>
+            <a href="#contacto" class="hover:text-white transition-colors">Contacto</a>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="https://instagram.com/myfitadmin" target="_blank" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background: rgba(38,104,248,0.1); color:#2668F8;" title="Instagram">
+              <i data-lucide="instagram" style="width:18px;height:18px;"></i>
+            </a>
+            <a href="https://tiktok.com/@myfitadmin" target="_blank" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background: rgba(38,104,248,0.1); color:#2668F8;" title="TikTok">
+              <i data-lucide="music" style="width:18px;height:18px;"></i>
+            </a>
+            <a href="https://wa.me/5491100000000" target="_blank" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background: rgba(37,211,102,0.1); color:#25D366;" title="WhatsApp">
+              <i data-lucide="message-circle" style="width:18px;height:18px;"></i>
+            </a>
+          </div>
+        </div>
+        <div class="flex flex-col md:flex-row items-center justify-between gap-2 pt-6" style="border-top:1px solid rgba(255,255,255,0.05);">
+          <p id="footer-text" class="text-sm" style="color:#A0A0A0;">© 2025 MyFit Admin. Sistema de gestión para gimnasios. Hecho en Latinoamérica.</p>
+          <div class="flex gap-4 text-xs" style="color:#A0A0A0;">
+            <a href="#" class="hover:text-white transition-colors">Política de Privacidad</a>
+            <a href="#" class="hover:text-white transition-colors">Términos de Uso</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- end app-wrapper -->
+
+  <script>
+    // Mobile menu
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.add('hidden');
+      });
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-trigger').addEventListener('click', () => {
+        const answer = item.querySelector('.faq-answer');
+        const isOpen = item.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-answer').classList.remove('open');
+        });
+
+        // Open clicked if it was closed
+        if (!isOpen) {
+          item.classList.add('open');
+          answer.classList.add('open');
+        }
+      });
+    });
+
+    // Form submission
+    document.getElementById('contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('cf-name').value;
+      const phone = document.getElementById('cf-phone').value;
+      const gym = document.getElementById('cf-gym').value;
+
+      // Show success
+      document.getElementById('form-success').classList.remove('hidden');
+      e.target.reset();
+
+      // If phone provided, open WhatsApp
+      if (phone) {
+        const cleanPhone = phone.replace(/\D/g, '');
+        const msg = encodeURIComponent(`Hola! Soy ${name} del gimnasio ${gym}. Quiero probar MyFit Admin gratis.`);
+        setTimeout(() => {
+          window.open(`https://wa.me/5491100000000?text=${msg}`, '_blank');
+        }, 800);
+      }
+
+      setTimeout(() => {
+        document.getElementById('form-success').classList.add('hidden');
+      }, 6000);
+    });
+
+    // Nav scroll effect — add urgency bar offset
+    const urgencyBar = document.querySelector('[style*="rgba(38,104,248,0.15)"]');
+    const nav = document.querySelector('nav');
+
+    // Smooth scroll offset for fixed nav + urgency bar
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          const offset = 80;
+          const appWrapper = document.getElementById('app-wrapper');
+          const targetTop = target.offsetTop - offset;
+          appWrapper.scrollTo({ top: targetTop, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Animate stats on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'countUp 0.6s ease both';
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.stat-card').forEach(el => observer.observe(el));
+
+    // Element SDK (preserve original)
+    const defaultConfig = {
+      hero_title: 'Organizá tu gimnasio y llenalo de alumnos nuevos',
+      hero_subtitle: 'Automatizá cobros, controlá alumnos, organizá clases y captá clientes nuevos con MyFit Admin: el sistema que ordena tu negocio y lo hace crecer.',
+      cta_button_text: 'Pedí tu mes gratis',
+      problems_title: 'Si tenés un gimnasio, seguro te pasa esto…',
+      benefits_title: 'Lo que vas a lograr usando MyFit Admin',
+      features_title: 'Todo lo que incluye',
+      testimonials_title: 'Gimnasios que ya están creciendo con MyFit Admin',
+      why_title: '¿Por qué elegir MyFit Admin?',
+      final_cta_title: 'Pedí tu mes gratis hoy y empezá a ver resultados',
+      footer_text: '© 2025 MyFit Admin. Sistema de gestión para gimnasios. Hecho en Latinoamérica.',
+      background_color: '#0A0A0A',
+      surface_color: '#111111',
+      text_color: '#FFFFFF',
+      accent_color: '#2668F8',
+      muted_color: '#A0A0A0',
+      font_family: 'Outfit',
+      font_size: 16
+    };
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          const c = { ...defaultConfig, ...config };
+          document.getElementById('app-wrapper').style.backgroundColor = c.background_color;
+          document.getElementById('app-wrapper').style.color = c.text_color;
+        },
+        mapToCapabilities: (config) => {
+          const c = { ...defaultConfig, ...config };
+          return {
+            recolorables: [
+              { get: () => c.background_color, set: (v) => window.elementSdk.setConfig({ background_color: v }) },
+              { get: () => c.accent_color, set: (v) => window.elementSdk.setConfig({ accent_color: v }) },
+              { get: () => c.text_color, set: (v) => window.elementSdk.setConfig({ text_color: v }) },
+              { get: () => c.muted_color, set: (v) => window.elementSdk.setConfig({ muted_color: v }) },
+            ],
+            borderables: [],
+            fontEditable: { get: () => c.font_family, set: (v) => window.elementSdk.setConfig({ font_family: v }) },
+            fontSizeable: { get: () => c.font_size, set: (v) => window.elementSdk.setConfig({ font_size: v }) }
+          };
+        },
+        mapToEditPanelValues: (config) => {
+          const c = { ...defaultConfig, ...config };
+          return new Map([
+            ['hero_title', c.hero_title],
+            ['hero_subtitle', c.hero_subtitle],
+            ['cta_button_text', c.cta_button_text],
+            ['problems_title', c.problems_title],
+            ['benefits_title', c.benefits_title],
+            ['features_title', c.features_title],
+            ['testimonials_title', c.testimonials_title],
+            ['why_title', c.why_title],
+            ['final_cta_title', c.final_cta_title],
+            ['footer_text', c.footer_text]
+          ]);
+        }
+      });
+    }
+
+    lucide.createIcons();
+
+    // Keep WA button above footer
+    const waBtn = document.querySelector('.wa-float');
+    const footer = document.querySelector('footer');
+    const appWrapper = document.getElementById('app-wrapper');
+    const WA_MARGIN = 28;
+
+    function updateWaPosition() {
+      const footerTop = footer.getBoundingClientRect().top;
+      const windowH = window.innerHeight;
+      const btnH = waBtn.offsetHeight;
+      // How far the footer has scrolled into view
+      const overlap = (windowH - WA_MARGIN - btnH) - footerTop;
+      if (overlap > 0) {
+        waBtn.style.bottom = (WA_MARGIN + overlap) + 'px';
+      } else {
+        waBtn.style.bottom = WA_MARGIN + 'px';
+      }
+    }
+
+    appWrapper.addEventListener('scroll', updateWaPosition);
+    window.addEventListener('resize', updateWaPosition);
+    updateWaPosition();
+  </script>
+ </body>
+</html>
