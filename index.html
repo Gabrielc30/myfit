@@ -360,6 +360,76 @@
       </div>
     </section>
 
+    <!-- VIDEO DEMO -->
+    <section class="w-full px-6 py-20 md:py-28" style="background: #111111;">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-12">
+          <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4 mono" style="background: rgba(38,104,248,0.1); color:#2668F8; border: 1px solid rgba(38,104,248,0.2);">
+            Demo en vivo
+          </div>
+          <h2 class="text-4xl md:text-5xl font-black leading-tight mb-4" style="color:#FFFFFF;">Mirá cómo funciona <span style="color:#2668F8;">por dentro</span></h2>
+          <p style="color:#A0A0A0; font-size:18px; line-height:1.7;">En menos de 2 minutos vas a ver exactamente lo que vas a usar todos los días.</p>
+        </div>
+
+        <!-- YouTube lazy facade -->
+        <div class="relative rounded-2xl overflow-hidden" style="border: 1px solid rgba(38,104,248,0.2); box-shadow: 0 0 60px rgba(38,104,248,0.08);">
+          <!-- Facade: solo se ve hasta que el usuario hace click -->
+          <div id="yt-facade" style="cursor:pointer; position:relative; aspect-ratio:16/9; background:#0A0A0A;">
+
+            <!-- Thumbnail — reemplazá G4C_h_PLQg8 con el ID real de YouTube -->
+            <img
+              id="yt-thumb"
+              src="https://img.youtube.com/vi/G4C_h_PLQg8/maxresdefault.jpg"
+              alt="Demo de MyFit Admin"
+              style="width:100%; height:100%; object-fit:cover; display:block; opacity:0.7;"
+              onerror="this.style.display='none'; document.getElementById('yt-placeholder').style.display='flex';"
+            >
+
+            <!-- Placeholder visual mientras no hay thumbnail real -->
+            <div id="yt-placeholder" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; flex-direction:column; gap:16px; background: linear-gradient(135deg, #0F0F0F 0%, #1A1A1A 100%);">
+              <i data-lucide="monitor-play" style="width:64px;height:64px;color:rgba(38,104,248,0.4);"></i>
+              <p class="text-sm font-medium" style="color:#A0A0A0;">Video demo próximamente</p>
+            </div>
+
+            <!-- Overlay oscuro sobre el thumb -->
+            <div style="position:absolute; inset:0; background: rgba(0,0,0,0.3);"></div>
+
+            <!-- Botón de play -->
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+              <div id="yt-play-btn" style="
+                width:72px; height:72px; border-radius:50%;
+                background: #2668F8;
+                display:flex; align-items:center; justify-content:center;
+                box-shadow: 0 0 40px rgba(38,104,248,0.5);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+              ">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="white" style="margin-left:3px;">
+                  <polygon points="5,3 19,12 5,21"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Duración estimada -->
+            <div style="position:absolute; bottom:16px; right:16px; background:rgba(0,0,0,0.7); padding:4px 10px; border-radius:6px;">
+              <span class="mono text-xs font-bold" style="color:#FFFFFF;">2:00</span>
+            </div>
+          </div>
+
+          <!-- Iframe real — se inyecta al hacer click (reemplazá G4C_h_PLQg8) -->
+          <div id="yt-player" style="display:none; aspect-ratio:16/9;">
+            <!-- El iframe se inserta via JS al hacer click -->
+          </div>
+        </div>
+
+        <!-- Trust bajo el video -->
+        <div class="flex flex-wrap justify-center gap-6 mt-8 text-sm" style="color:#A0A0A0;">
+          <span class="flex items-center gap-2"><i data-lucide="eye" style="width:16px;height:16px;color:#2668F8;"></i>Sin registro para ver</span>
+          <span class="flex items-center gap-2"><i data-lucide="clock" style="width:16px;height:16px;color:#2668F8;"></i>Menos de 2 minutos</span>
+          <span class="flex items-center gap-2"><i data-lucide="lock" style="width:16px;height:16px;color:#2668F8;"></i>Demo con datos reales</span>
+        </div>
+      </div>
+    </section>
+
     <!-- BENEFICIOS -->
     <section id="beneficios" class="w-full px-6 py-20 md:py-28" style="background: #1A1A1A;">
       <div class="max-w-7xl mx-auto">
@@ -1056,6 +1126,40 @@
             ['footer_text', c.footer_text]
           ]);
         }
+      });
+    }
+
+    // YouTube lazy load
+    const facade = document.getElementById('yt-facade');
+    const player = document.getElementById('yt-player');
+    const playBtn = document.getElementById('yt-play-btn');
+
+    if (facade) {
+      playBtn.addEventListener('mouseenter', () => {
+        playBtn.style.transform = 'scale(1.12)';
+        playBtn.style.boxShadow = '0 0 60px rgba(38,104,248,0.7)';
+      });
+      playBtn.addEventListener('mouseleave', () => {
+        playBtn.style.transform = 'scale(1)';
+        playBtn.style.boxShadow = '0 0 40px rgba(38,104,248,0.5)';
+      });
+
+      facade.addEventListener('click', () => {
+        // Reemplazá G4C_h_PLQg8 con el ID real de YouTube (ej: dQw4w9WgXcQ)
+        const VIDEO_ID = 'G4C_h_PLQg8';
+        facade.style.display = 'none';
+        player.style.display = 'block';
+        player.innerHTML = `
+          <iframe
+            src="https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0&modestbranding=1"
+            title="MyFitAdmin"
+            frameborder="0"
+            style="width:100%;height:100%;border:none;"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        `;
       });
     }
 
