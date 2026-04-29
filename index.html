@@ -388,7 +388,7 @@
             <!-- Placeholder visual mientras no hay thumbnail real -->
             <div id="yt-placeholder" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; flex-direction:column; gap:16px; background: linear-gradient(135deg, #0F0F0F 0%, #1A1A1A 100%);">
               <i data-lucide="monitor-play" style="width:64px;height:64px;color:rgba(38,104,248,0.4);"></i>
-              <p class="text-sm font-medium" style="color:#A0A0A0;">Video demo</p>
+              <p class="text-sm font-medium" style="color:#A0A0A0;">Video demo próximamente</p>
             </div>
 
             <!-- Overlay oscuro sobre el thumb -->
@@ -424,7 +424,7 @@
         <!-- Trust bajo el video -->
         <div class="flex flex-wrap justify-center gap-6 mt-8 text-sm" style="color:#A0A0A0;">
           <span class="flex items-center gap-2"><i data-lucide="eye" style="width:16px;height:16px;color:#2668F8;"></i>Sin registro para ver</span>
-          <span class="flex items-center gap-2"><i data-lucide="clock" style="width:16px;height:16px;color:#2668F8;"></i>En solo 2 minutos</span>
+          <span class="flex items-center gap-2"><i data-lucide="clock" style="width:16px;height:16px;color:#2668F8;"></i>Menos de 2 minutos</span>
           <span class="flex items-center gap-2"><i data-lucide="lock" style="width:16px;height:16px;color:#2668F8;"></i>Demo con datos reales</span>
         </div>
       </div>
@@ -1015,24 +1015,44 @@
     });
 
     // Form submission
-    document.getElementById('contact-form').addEventListener('submit', (e) => {
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('cf-name').value;
-      const phone = document.getElementById('cf-phone').value;
-      const gym = document.getElementById('cf-gym').value;
+
+      const name     = document.getElementById('cf-name').value.trim();
+      const gym      = document.getElementById('cf-gym').value.trim();
+      const email    = document.getElementById('cf-email').value.trim();
+      const phone    = document.getElementById('cf-phone').value.trim();
+      const submitBtn = document.getElementById('contact-submit');
+
+      // Disable button while sending
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Enviando...</span>';
+
+      const payload = {
+        nombre:       name,
+        gimnasio:     gym,
+        email:        email,
+        telefono:     phone.replace(/\D/g, ''),
+        fecha_envio:  new Date().toISOString()
+      };
+
+      try {
+        await fetch('https://gabrielc30.app.n8n.cloud/webhook-test/04494261-97f2-44b9-8afc-5e8c6bd80e45', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        // Fallo silencioso — el lead igual ve el mensaje de éxito
+        console.error('Webhook error:', err);
+      }
 
       // Show success
       document.getElementById('form-success').classList.remove('hidden');
       e.target.reset();
-
-      // If phone provided, open WhatsApp
-      if (phone) {
-        const cleanPhone = phone.replace(/\D/g, '');
-        const msg = encodeURIComponent(`Hola! Soy ${name} del gimnasio ${gym}. Quiero probar MyFit Admin gratis.`);
-        setTimeout(() => {
-          window.open(`https://wa.me/5491100000000?text=${msg}`, '_blank');
-        }, 800);
-      }
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>Pedir mi mes gratis</span><i data-lucide="send" style="width:18px;height:18px;"></i>';
+      lucide.createIcons();
 
       setTimeout(() => {
         document.getElementById('form-success').classList.add('hidden');
